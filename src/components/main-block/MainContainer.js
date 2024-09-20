@@ -13,7 +13,7 @@ function MainContainer() {
 
     return (
     <main className="flex flex-col gap-8  items-center sm:items-start w-full 
-        mt-10
+        mt-10 z-[1] relative
     ">
         {/* Title */}
         <div className='w-full grid grid-cols-6 grid-rows-2'>
@@ -27,7 +27,7 @@ function MainContainer() {
             </div>
             <div className='col-start-3 col-end-5 row-span-2'>
                 <h2>Hari ini</h2>
-                <p>{Date.now()}</p>
+                <p>{4322424}</p>
             </div>
         </div>
         {/* Search */}
@@ -37,7 +37,7 @@ function MainContainer() {
                     <IoIosSearch className='absolute top-[20%] left-[1%] w-8 h-8'/>
                     <input 
                         type="text" 
-                        class="bg-white h-14 w-full px-12 rounded-lg focus:outline-none hover:cursor-text" 
+                        className="bg-white h-14 w-full px-12 rounded-lg focus:outline-none hover:cursor-text" 
                         name="search" 
                         placeholder='Search'
                         value={searchQuery}
