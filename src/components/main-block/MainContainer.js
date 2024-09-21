@@ -192,7 +192,9 @@ function MainContainer() {
                       <div className="mb-2 w-full" key={data.name}>
                         <CardPengeluaran
                           key={idx}
-                          showModal={modalContext.showModal}
+                          onClick={() =>
+                            modalContext.showModal(true, { ...data })
+                          }
                           deskripsi={data.description}
                           nominal={data.amount}
                           judul={data.name}

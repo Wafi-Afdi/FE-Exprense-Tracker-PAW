@@ -83,7 +83,7 @@ function EditCreatePopupModal({
             <p className="text-sm">Tanggal</p>
             <div className="mt-1" />
             <DatePicker
-              selected={formData.date}
+              selected={new Date(formData.date)}
               onChange={(date) => UbahStateValue(date, "date")}
               className='"bg-white p-2 border-2 border-black text-sm rounded-lg relative"'
               popperClassName="z-[200]"

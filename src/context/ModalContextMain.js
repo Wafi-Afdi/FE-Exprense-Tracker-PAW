@@ -66,6 +66,17 @@ export const ModalProvider = ({ children }) => {
           onUpdate.current();
         })
         .catch((err) => console.log(err));
+    } else {
+      axios
+        .put(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions/${formModal._id}`,
+          formModal
+        )
+        .then(() => {
+          hideModal();
+          onUpdate.current();
+        })
+        .catch((err) => console.log(err));
     }
   }
 
