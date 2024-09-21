@@ -34,10 +34,23 @@ function MainContainer() {
     [dataPengeluaran]
   );
 
+  // Filter data berdasarkan search & filter
+  const filteredData = useMemo(
+    () =>
+      dataPengeluaran.filter((data) =>
+        searchQuery
+          .split(/\s+/)
+          .every((searchWord) =>
+            data.nama.toLowerCase().includes(searchWord.toLowerCase())
+          )
+      ),
+    [dataPengeluaran, searchQuery]
+  );
+
   // Grup data pengeluaran berdasarkan harinya
   const groupedData = useMemo(
     () =>
-      dataPengeluaran
+      filteredData
         .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
         .reduce((groups, current) => {
           const date = moment.tz(current.tanggal, "Asia/Jakarta");
@@ -49,17 +62,14 @@ function MainContainer() {
           groups[formattedDate].total += current.nominal;
           return groups;
         }, {}),
-    [dataPengeluaran]
+    [filteredData]
   );
 
   function SubmitSearch(e) {
-    // TODO Ananta untuk fetch setelah search
     e.preventDefault();
+    const searchQuery = Object.fromEntries(new FormData(e.target)).search;
+    SetSearchQuery(searchQuery);
   }
-
-  useEffect(() => {
-    // TODO Ananta untuk fetch setelah beda filter
-  }, [filter]);
 
   return (
     <main className="flex flex-col gap-8  items-center sm:items-start w-full mt-10 z-[1] relative">
@@ -89,8 +99,6 @@ function MainContainer() {
                 className="bg-white h-14 w-full px-12 rounded-lg focus:outline-none hover:cursor-text"
                 name="search"
                 placeholder="Search"
-                value={searchQuery}
-                onChange={(e) => SetSearchQuery(e.target.value)}
               />
             </form>
           </div>
