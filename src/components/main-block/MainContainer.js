@@ -103,7 +103,7 @@ function MainContainer() {
               {/* Show card */}
               {items.map((data, idx) => {
                 return (
-                  <div className="mb-2 w-full">
+                  <div className="mb-2 w-full" key={data.nama}>
                     <CardPengeluaran
                       key={idx}
                       showModal={modalContext.showModal}
