@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 // ikon 
 import { IoCloseSharp } from "react-icons/io5";
@@ -12,10 +12,10 @@ import EditCreatePopupModal from '@/components/universal-block/Modal/EditModal';
 const ModalContext = createContext();
 
 export const ModalProvider = ({ children }) => {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     // untuk data
-    const [idTerpilih, SetIDTerpilih] = useState(null)
+    const [idTerpilih, SetIDTerpilih] = useState(null) // id mongo
     const [isEdit, SetIsEdit] = useState(true)
 
     // untuk form
@@ -33,8 +33,13 @@ export const ModalProvider = ({ children }) => {
         SetFormModal({...copyForm})
     }
 
-    const showModal = (is_edit) => {
+    const showModal = (is_edit, id_unik=null) => {
         SetIsEdit(is_edit)
+        if(id_unik) {
+            SetIDTerpilih(id_unik)
+            // baru fetch disini form nya
+        }
+        
         setIsOpen(true);
     };
     
@@ -44,11 +49,13 @@ export const ModalProvider = ({ children }) => {
 
     // integrasi buat delete
     function OnDeleteAPI() {
+        // TODO Ananta untuk delete berdasarkan id 
         setIsOpen(false)
     }
 
     // integrasi buat edit atau buat baru
     function OnSubmitAPI(e) {
+        // TODO Ananta untuk save / submit baru di cek dulu
         e.preventDefault()
     }
 

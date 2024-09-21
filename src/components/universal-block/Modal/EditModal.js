@@ -84,8 +84,8 @@ function EditCreatePopupModal({
                         <div className='mt-1'/>
                         <Dropdown 
                             callback={(data) => UbahStateValue(data, 'kategori')}
-                            name='kategori'
                             value={formData.kategori}
+                            name='kategori'
                         />
                     </div>
                     <div>

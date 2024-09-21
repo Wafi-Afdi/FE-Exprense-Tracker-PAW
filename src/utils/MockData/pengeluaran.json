@@ -1,0 +1,73 @@
+[
+    {
+      "tanggal": "2023-09-15T10:45:00",
+      "nominal": 150000,
+      "kategori": "Food & Beverages",
+      "nama": "Warung Sederhana",
+      "deskripsi": "Lunch with colleagues"
+    },
+    {
+      "tanggal": "2024-09-21T15:30:00",
+      "nominal": 80000,
+      "kategori": "Transportation",
+      "nama": "Gojek",
+      "deskripsi": "Ride to office"
+    },
+    {
+      "tanggal": "2023-09-13T12:00:00",
+      "nominal": 250000,
+      "kategori": "Groceries",
+      "nama": "Supermarket Giant",
+      "deskripsi": "Weekly groceries shopping"
+    },
+    {
+      "tanggal": "2023-09-12T09:00:00",
+      "nominal": 120000,
+      "kategori": "Bills",
+      "nama": "Electricity",
+      "deskripsi": "Monthly electricity bill"
+    },
+    {
+      "tanggal": "2023-09-11T18:20:00",
+      "nominal": 100000,
+      "kategori": "Entertainment",
+      "nama": "Cinema XXI",
+      "deskripsi": "Movie night"
+    },
+    {
+      "tanggal": "2023-09-10T14:00:00",
+      "nominal": 50000,
+      "kategori": "Transportation",
+      "nama": "Grab",
+      "deskripsi": "Ride to mall"
+    },
+    {
+      "tanggal": "2023-09-09T08:45:00",
+      "nominal": 300000,
+      "kategori": "Shopping",
+      "nama": "Zara",
+      "deskripsi": "Clothes shopping"
+    },
+    {
+      "tanggal": "2023-09-08T17:00:00",
+      "nominal": 15000,
+      "kategori": "Snacks",
+      "nama": "Minimarket",
+      "deskripsi": "Evening snacks"
+    },
+    {
+      "tanggal": "2023-09-07T11:30:00",
+      "nominal": 220000,
+      "kategori": "Restaurant",
+      "nama": "Pizza Hut",
+      "deskripsi": "Dinner with friends"
+    },
+    {
+      "tanggal": "2023-09-06T19:00:00",
+      "nominal": 45000,
+      "kategori": "Drinks",
+      "nama": "Starbucks",
+      "deskripsi": "Coffee and tea"
+    }
+  ]
+  
