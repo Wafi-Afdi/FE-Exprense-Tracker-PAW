@@ -60,7 +60,9 @@ function MainContainer() {
           searchQuery
             .split(/\s+/)
             .every((searchWord) =>
-              data.name.toLowerCase().includes(searchWord.toLowerCase())
+              `${data.name} ${data.description}`
+                .toLowerCase()
+                .includes(searchWord.toLowerCase())
             )
         )
         // date filter
