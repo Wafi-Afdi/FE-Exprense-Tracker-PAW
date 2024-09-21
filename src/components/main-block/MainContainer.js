@@ -152,8 +152,8 @@ function MainContainer() {
       </div>
       {/* Search */}
       <div className="w-full">
-        <div class="w-full">
-          <div class="relative border-2 border-gray-300 rounded-lg">
+        <div className="w-full">
+          <div className="relative border-2 border-gray-300 rounded-lg">
             <form onSubmit={SubmitSearch}>
               <button type="submit" id="search_submit" name="search_submit">
                 <IoIosSearch className="absolute top-[20%] left-[1%] w-8 h-8" />
