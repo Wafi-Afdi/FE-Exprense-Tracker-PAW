@@ -18,7 +18,6 @@ function MainContainer() {
   const [searchQuery, SetSearchQuery] = useState("");
   const [dataPengeluaran, SetDataPengeluaran] = useState([...pengeluaran]);
   const modalContext = useModal();
-  //console.log(dataPengeluaran)
 
   // filter
   const [filter, SetFilter] = useState({
@@ -26,51 +25,30 @@ function MainContainer() {
     kategori: "",
     jenisPengeluaran: "",
   });
+  const UbahFilterValue = (value, key) =>
+    SetFilter((filter) => ({ ...filter, [key]: value }));
 
-  // ubah filter
-  function UbahFilterValue(value, key) {
-    const copyFilter = filter;
-    copyFilter[key] = value;
-    SetFilter({ ...copyFilter });
-  }
+  // Kalkulasi total semua pengeluaran
+  const totalPengeluaran = useMemo(
+    () => dataPengeluaran.reduce((sum, item) => sum + item.nominal, 0),
+    [dataPengeluaran]
+  );
 
-  // Kalkulasi total semua
-  const totalPengeluaran = useMemo(() => {
-    return dataPengeluaran.reduce((sum, item) => sum + item.nominal, 0);
-  }, [dataPengeluaran]);
-
-  // grup data pengeluaran dengan harinya
-  const groupByDay = (data) => {
-    // Sort by newest date first
-    const sortedData = [...data].sort((a, b) => {
-      const dateA = moment.tz(a.datetime, "Asia/Jakarta");
-      const dateB = moment.tz(b.datetime, "Asia/Jakarta");
-      return dateB - dateA; // Sort by descending order (newest first)
-    });
-    return sortedData.reduce((acc, current) => {
-      // Convert datetime to WIB timezone
-      const date = moment.tz(current.tanggal, "Asia/Jakarta");
-
-      // Format the date to "Month Day, Year"
-      const formattedDate = date.format("MMMM D, YYYY");
-
-      // Check if the group for this date already exists
-      if (!acc[formattedDate]) {
-        acc[formattedDate] = [];
-        acc[formattedDate].items = [];
-        acc[formattedDate].total = 0;
-      }
-
-      // Add the current item to the respective group
-      acc[formattedDate].items.push(current);
-      acc[formattedDate].total += current.nominal;
-
-      return acc;
-    }, {});
-  };
-
+  // Grup data pengeluaran berdasarkan harinya
   const groupedData = useMemo(
-    () => groupByDay(dataPengeluaran),
+    () =>
+      dataPengeluaran
+        .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
+        .reduce((groups, current) => {
+          const date = moment.tz(current.tanggal, "Asia/Jakarta");
+          const formattedDate = date.format("MMMM D, YYYY");
+          if (!groups[formattedDate]) {
+            groups[formattedDate] = { items: [], total: 0 };
+          }
+          groups[formattedDate].items.push(current);
+          groups[formattedDate].total += current.nominal;
+          return groups;
+        }, {}),
     [dataPengeluaran]
   );
 
@@ -84,11 +62,7 @@ function MainContainer() {
   }, [filter]);
 
   return (
-    <main
-      className="flex flex-col gap-8  items-center sm:items-start w-full 
-        mt-10 z-[1] relative
-    "
-    >
+    <main className="flex flex-col gap-8  items-center sm:items-start w-full mt-10 z-[1] relative">
       {/* Title */}
       <div className="w-full grid grid-cols-6 grid-rows-2">
         <h1 className="col-start-1 col-end-3 row-span-1">
