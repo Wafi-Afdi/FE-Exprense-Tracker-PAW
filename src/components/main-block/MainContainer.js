@@ -12,12 +12,23 @@ import moment from "moment-timezone";
 import { useModal } from "@/context/ModalContextMain";
 import CardPengeluaran from "../universal-block/Card/CardPengeluaran";
 import Dropdown from "../universal-block/Dropdown/Dropdown";
-import pengeluaran from "@/utils/MockData/pengeluaran.json";
+import axios from "axios";
 
 function MainContainer() {
   const [searchQuery, SetSearchQuery] = useState("");
-  const [dataPengeluaran, SetDataPengeluaran] = useState(pengeluaran);
+  const [dataPengeluaran, SetDataPengeluaran] = useState([]);
   const modalContext = useModal();
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions`)
+      .then((res) => {
+        SetDataPengeluaran(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   // filter
   const [filter, SetFilter] = useState({
