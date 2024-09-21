@@ -16,14 +16,17 @@ import axios from "axios";
 
 function MainContainer() {
   const [searchQuery, SetSearchQuery] = useState("");
+  const [fetched, setFetched] = useState(false);
   const [dataPengeluaran, SetDataPengeluaran] = useState([]);
   const modalContext = useModal();
 
   useEffect(() => {
+    if (fetched) return;
     axios
       .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions`)
       .then((res) => {
         SetDataPengeluaran(res.data.data);
+        setFetched(true);
       })
       .catch((err) => {
         console.log(err);
