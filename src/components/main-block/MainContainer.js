@@ -72,6 +72,7 @@ function MainContainer() {
             (new Date(data.date).getFullYear() === filter.date.getFullYear() &&
               new Date(data.date).getMonth() === filter.date.getMonth())
         )
+        // category filter
         .filter(
           (data) => !filter.category || data.category === filter.category
         ),
@@ -105,10 +106,6 @@ function MainContainer() {
     const searchQuery = Object.fromEntries(new FormData(e.target)).search;
     SetSearchQuery(searchQuery);
   }
-
-  useEffect(() => {
-    console.log(filter);
-  }, [filter]);
 
   return (
     <main className="flex flex-col gap-8  items-center sm:items-start w-full mt-10 z-[1] relative">
@@ -145,7 +142,7 @@ function MainContainer() {
         <div className="w-full flex flex-row gap-3 flex-wrap mt-2">
           <Dropdown
             name="kategori"
-            options={["none", "income", "expense"]}
+            options={["test", "test2", "Family"]}
             callback={(data) => UbahFilterValue(data, "category")}
             value={filter.category}
           />
