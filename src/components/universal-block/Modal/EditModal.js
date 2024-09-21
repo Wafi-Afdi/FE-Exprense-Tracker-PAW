@@ -1,13 +1,12 @@
-"use client"
-import React, { forwardRef } from 'react';
+"use client";
+import React, { forwardRef } from "react";
 
-// ikon 
+// ikon
 import { IoCloseSharp } from "react-icons/io5";
 
 // komponen eksternal
-import DatePicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 
 // komponen internal
 import Dropdown from '@/components/universal-block/Dropdown/Dropdown';
@@ -16,12 +15,12 @@ import TextInput from '@/components/universal-block/Input/TextInput';
 import CalendarContainer from './OverlayPortal';
 
 function EditCreatePopupModal({
-    closeModal=() => {},
-    onSubmit=() => {},
-    onDelete=() => {},
-    isEdit=false,
-    UbahStateValue,
-    formData
+  closeModal = () => {},
+  onSubmit = () => {},
+  onDelete = () => {},
+  isEdit = false,
+  UbahStateValue,
+  formData,
 }) {
 
     const ExampleCustomInput = forwardRef(
@@ -138,8 +137,9 @@ function EditCreatePopupModal({
                     </div>
                 </form>
             </div>
-        </div>
-    )
+        
+      </div>
+  );
 }
 
-export default EditCreatePopupModal
+export default EditCreatePopupModal;

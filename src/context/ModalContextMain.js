@@ -1,84 +1,109 @@
-"use client"
-import React, { createContext, useContext, useEffect, useState } from 'react';
-
-// ikon 
-import { IoCloseSharp } from "react-icons/io5";
+"use client";
+import React, { createContext, useContext, useRef, useState } from "react";
 
 // komponen internal
-import Dropdown from '@/components/universal-block/Dropdown/Dropdown';
-import TextInput from '@/components/universal-block/Input/TextInput';
-import EditCreatePopupModal from '@/components/universal-block/Modal/EditModal';
+import EditCreatePopupModal from "@/components/universal-block/Modal/EditModal";
+import axios from "axios";
 
 const ModalContext = createContext();
 
 export const ModalProvider = ({ children }) => {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-    // untuk data
-    const [idTerpilih, SetIDTerpilih] = useState(null) // id mongo
-    const [isEdit, SetIsEdit] = useState(true)
+  // untuk data
+  const [isEdit, SetIsEdit] = useState(true);
 
-    // untuk form
-    const [formModal, SetFormModal] = useState({
-        nama : "",
-        nominal : "",
-        kategori : "",
-        tanggal : new Date(),
-        jenisPengeluaran : "Income"
-    })
+  // Untuk update setelah create/edit/delete
+  const onUpdate = useRef();
+  const setOnUpdate = (func) => {
+    onUpdate.current = func;
+  };
 
-    function UbahStateValue (value, key) {
-        const copyForm = formModal
-        copyForm[key] = value
-        SetFormModal({...copyForm})
+  // untuk form
+  const defaultFormData = {
+    name: "",
+    description: "",
+    category: "",
+    amount: "",
+    date: new Date(),
+  };
+  const [formModal, SetFormModal] = useState(defaultFormData);
+
+  function UbahStateValue(value, key) {
+    const copyForm = formModal;
+    copyForm[key] = value;
+    SetFormModal({ ...copyForm });
+  }
+
+  const showModal = (is_edit, form_data = defaultFormData) => {
+    SetIsEdit(is_edit);
+    SetFormModal(form_data);
+    setIsOpen(true);
+  };
+
+  const hideModal = () => {
+    setIsOpen(false);
+  };
+
+  // integrasi buat delete
+  function OnDeleteAPI() {
+    axios
+      .delete(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions/${formModal._id}`
+      )
+      .then(() => {
+        hideModal();
+        onUpdate.current();
+      })
+      .catch((err) => console.log(err));
+  }
+
+  // integrasi buat edit atau buat baru
+  function OnSubmitAPI(e) {
+    e.preventDefault();
+    if (!isEdit) {
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions`,
+          formModal
+        )
+        .then(() => {
+          hideModal();
+          onUpdate.current();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      axios
+        .put(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions/${formModal._id}`,
+          formModal
+        )
+        .then(() => {
+          hideModal();
+          onUpdate.current();
+        })
+        .catch((err) => console.log(err));
     }
+  }
 
-    const showModal = (is_edit, id_unik=null) => {
-        SetIsEdit(is_edit)
-        if(id_unik) {
-            SetIDTerpilih(id_unik)
-            // baru fetch disini form nya
-        }
-        
-        setIsOpen(true);
-    };
-    
-    const hideModal = () => {
-        setIsOpen(false);
-    };
-
-    // integrasi buat delete
-    function OnDeleteAPI() {
-        // TODO Ananta untuk delete berdasarkan id 
-        setIsOpen(false)
-    }
-
-    // integrasi buat edit atau buat baru
-    function OnSubmitAPI(e) {
-        // TODO Ananta untuk save / submit baru di cek dulu
-        e.preventDefault()
-    }
-
-    return (
-        <ModalContext.Provider value={{ showModal, hideModal, SetIDTerpilih, showModal }}>
-            {
-                isOpen 
-                &&
-                <EditCreatePopupModal 
-                    isEdit={isEdit}
-                    onSubmit={OnSubmitAPI}
-                    closeModal={hideModal}
-                    onDelete={() => OnDeleteAPI()}
-                    isOpen={isOpen}
-                    UbahStateValue={UbahStateValue}
-                    formData={formModal}
-                />
-            }
-            {children}
-        </ModalContext.Provider>
-    );
+  return (
+    <ModalContext.Provider value={{ showModal, hideModal, setOnUpdate }}>
+      {isOpen && (
+        <EditCreatePopupModal
+          isEdit={isEdit}
+          onSubmit={OnSubmitAPI}
+          closeModal={hideModal}
+          onDelete={() => OnDeleteAPI()}
+          isOpen={isOpen}
+          UbahStateValue={UbahStateValue}
+          formData={formModal}
+        />
+      )}
+      {children}
+    </ModalContext.Provider>
+  );
 };
 
 export const useModal = () => {
-    return useContext(ModalContext);
+  return useContext(ModalContext);
 };
