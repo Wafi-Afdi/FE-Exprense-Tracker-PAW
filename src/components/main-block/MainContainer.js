@@ -16,21 +16,20 @@ import pengeluaran from "@/utils/MockData/pengeluaran.json";
 
 function MainContainer() {
   const [searchQuery, SetSearchQuery] = useState("");
-  const [dataPengeluaran, SetDataPengeluaran] = useState([...pengeluaran]);
+  const [dataPengeluaran, SetDataPengeluaran] = useState(pengeluaran);
   const modalContext = useModal();
 
   // filter
   const [filter, SetFilter] = useState({
     date: "",
-    kategori: "",
-    jenisPengeluaran: "",
+    category: "",
   });
   const UbahFilterValue = (value, key) =>
     SetFilter((filter) => ({ ...filter, [key]: value }));
 
   // Kalkulasi total semua pengeluaran
   const totalPengeluaran = useMemo(
-    () => dataPengeluaran.reduce((sum, item) => sum + item.nominal, 0),
+    () => dataPengeluaran.reduce((sum, item) => sum + item.amount, 0),
     [dataPengeluaran]
   );
 
@@ -41,7 +40,7 @@ function MainContainer() {
         searchQuery
           .split(/\s+/)
           .every((searchWord) =>
-            data.nama.toLowerCase().includes(searchWord.toLowerCase())
+            data.name.toLowerCase().includes(searchWord.toLowerCase())
           )
       ),
     [dataPengeluaran, searchQuery]
@@ -51,15 +50,15 @@ function MainContainer() {
   const groupedData = useMemo(
     () =>
       filteredData
-        .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
         .reduce((groups, current) => {
-          const date = moment.tz(current.tanggal, "Asia/Jakarta");
+          const date = moment.tz(current.date, "Asia/Jakarta");
           const formattedDate = date.format("MMMM D, YYYY");
           if (!groups[formattedDate]) {
             groups[formattedDate] = { items: [], total: 0 };
           }
           groups[formattedDate].items.push(current);
-          groups[formattedDate].total += current.nominal;
+          groups[formattedDate].total += current.amount;
           return groups;
         }, {}),
     [filteredData]
@@ -114,7 +113,7 @@ function MainContainer() {
             name="kategori"
             options={["income", "expense"]}
             callback={(data) => UbahFilterValue(data, "kategori")}
-            value={filter.kategori}
+            value={filter.category}
           />
           <DatePicker
             className="bg-white p-2 border-2 border-black text-sm rounded-lg relative"
@@ -123,8 +122,8 @@ function MainContainer() {
             placeholderText="pilih bulan"
             showMonthYearPicker
             dateFormat="MMMM yyyy"
-            selected={filter.tanggal}
-            onChange={(date) => UbahFilterValue(date, "tanggal")}
+            selected={filter.date}
+            onChange={(date) => UbahFilterValue(date, "date")}
           />
         </div>
       </div>
@@ -154,7 +153,7 @@ function MainContainer() {
 
               // Get the day of the week in WIB timezone from the first item in the group
               const dayOfWeek = moment
-                .tz(items[0].tanggal, "Asia/Jakarta")
+                .tz(items[0].date, "Asia/Jakarta")
                 .format("dddd");
               //totalPengeluaran =
 
@@ -172,14 +171,14 @@ function MainContainer() {
                   {/* Show card */}
                   {items.map((data, idx) => {
                     return (
-                      <div className="mb-2 w-full" key={data.nama}>
+                      <div className="mb-2 w-full" key={data.name}>
                         <CardPengeluaran
                           key={idx}
                           showModal={modalContext.showModal}
-                          deskripsi={data.deskripsi}
-                          nominal={data.nominal}
-                          judul={data.nama}
-                          kategori={data.kategori}
+                          deskripsi={data.description}
+                          nominal={data.amount}
+                          judul={data.name}
+                          kategori={data.category}
                         />
                       </div>
                     );
