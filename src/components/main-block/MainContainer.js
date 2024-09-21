@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 // ikon
 import { IoIosSearch } from "react-icons/io";
@@ -69,58 +69,10 @@ function MainContainer() {
     }, {});
   };
 
-  const FormatDisplayCard = useCallback(() => {
-    if (!dataPengeluaran || dataPengeluaran.length === 0) return null;
-
-    // hasil grouping
-    const groupedData = useMemo(
-      () => groupByDay(dataPengeluaran),
-      [dataPengeluaran]
-    );
-    return (
-      <div>
-        {Object.keys(groupedData).map((dateKey) => {
-          const items = groupedData[dateKey].items;
-          const total_harian = groupedData[dateKey].total;
-
-          // Get the day of the week in WIB timezone from the first item in the group
-          const dayOfWeek = moment
-            .tz(items[0].tanggal, "Asia/Jakarta")
-            .format("dddd");
-          //totalPengeluaran =
-
-          return (
-            <div key={dateKey} className="mb-6">
-              <div className="flex flex-row justify-between items-center">
-                <div className="font-bold">
-                  <p>{dateKey}</p>
-                  <p>{dayOfWeek}</p>
-                </div>
-                <div>
-                  <p>-{total_harian} IDR</p>
-                </div>
-              </div>
-              {/* Show card */}
-              {items.map((data, idx) => {
-                return (
-                  <div className="mb-2 w-full" key={data.nama}>
-                    <CardPengeluaran
-                      key={idx}
-                      showModal={modalContext.showModal}
-                      deskripsi={data.deskripsi}
-                      nominal={data.nominal}
-                      judul={data.nama}
-                      kategori={data.kategori}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
-    );
-  }, [dataPengeluaran]);
+  const groupedData = useMemo(
+    () => groupByDay(dataPengeluaran),
+    [dataPengeluaran]
+  );
 
   function SubmitSearch(e) {
     // TODO Ananta untuk fetch setelah search
@@ -212,7 +164,48 @@ function MainContainer() {
           >
             <IoIosAddCircleOutline className="text-black w-8 h-8" />
           </button>
-          <div className="flex flex-col gap-4">{FormatDisplayCard()}</div>
+          {/* Display Cards */}
+          <div className="flex flex-col gap-4">
+            {Object.keys(groupedData).map((dateKey) => {
+              const items = groupedData[dateKey].items;
+              const total_harian = groupedData[dateKey].total;
+
+              // Get the day of the week in WIB timezone from the first item in the group
+              const dayOfWeek = moment
+                .tz(items[0].tanggal, "Asia/Jakarta")
+                .format("dddd");
+              //totalPengeluaran =
+
+              return (
+                <div key={dateKey} className="mb-6">
+                  <div className="flex flex-row justify-between items-center">
+                    <div className="font-bold">
+                      <p>{dateKey}</p>
+                      <p>{dayOfWeek}</p>
+                    </div>
+                    <div>
+                      <p>-{total_harian} IDR</p>
+                    </div>
+                  </div>
+                  {/* Show card */}
+                  {items.map((data, idx) => {
+                    return (
+                      <div className="mb-2 w-full" key={data.nama}>
+                        <CardPengeluaran
+                          key={idx}
+                          showModal={modalContext.showModal}
+                          deskripsi={data.deskripsi}
+                          nominal={data.nominal}
+                          judul={data.nama}
+                          kategori={data.kategori}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </main>
