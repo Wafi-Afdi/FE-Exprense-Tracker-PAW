@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 // komponen internal
 import Dropdown from '@/components/universal-block/Dropdown/Dropdown';
+import DropdownTypable from '../Dropdown/DropdownTypable';
 import TextInput from '@/components/universal-block/Input/TextInput';
 import CalendarContainer from './OverlayPortal';
 
@@ -82,7 +83,7 @@ function EditCreatePopupModal({
                     <div>
                         <p className='text-sm'>Kategori</p>
                         <div className='mt-1'/>
-                        <Dropdown 
+                        <DropdownTypable 
                             callback={(data) => UbahStateValue(data, 'kategori')}
                             value={formData.kategori}
                             name='kategori'
