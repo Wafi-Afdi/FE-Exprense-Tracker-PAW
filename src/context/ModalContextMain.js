@@ -16,15 +16,25 @@ export const ModalProvider = ({ children }) => {
 
     // untuk data
     const [idTerpilih, SetIDTerpilih] = useState(null)
+    const [isEdit, SetIsEdit] = useState(true)
 
     // untuk form
-    const [nama, SetNama] = useState("")
-    const [nominal, SetNominal] = useState("")
-    const [kategori, SetKategori] = useState("")
-    const [tanggal, SetTanggal] = useState("")
-    const [jenisPengeluaran, SetJenisPengeluaran] = useState("")
+    const [formModal, SetFormModal] = useState({
+        nama : "",
+        nominal : "",
+        kategori : "",
+        tanggal : new Date(),
+        jenisPengeluaran : "Income"
+    })
 
-    const showModal = (content) => {
+    function UbahStateValue (value, key) {
+        const copyForm = formModal
+        copyForm[key] = value
+        SetFormModal({...copyForm})
+    }
+
+    const showModal = (is_edit) => {
+        SetIsEdit(is_edit)
         setIsOpen(true);
     };
     
@@ -32,23 +42,29 @@ export const ModalProvider = ({ children }) => {
         setIsOpen(false);
     };
 
+    // integrasi buat delete
+    function OnDeleteAPI() {
+        setIsOpen(false)
+    }
+
+    // integrasi buat edit atau buat baru
+    function OnSubmitAPI(e) {
+        e.preventDefault()
+    }
+
     return (
-        <ModalContext.Provider value={{ showModal, hideModal, isOpen }}>
+        <ModalContext.Provider value={{ showModal, hideModal, SetIDTerpilih, showModal }}>
             {
                 isOpen 
                 &&
                 <EditCreatePopupModal 
-                    SetNama={SetNama}
-                    nama={nama}
-                    nominal={nominal}
-                    isEdit={true}
-                    SetNominal={SetNominal}
-                    onSubmit={(e) => {
-                        e.preventDefault()
-                    }}
+                    isEdit={isEdit}
+                    onSubmit={OnSubmitAPI}
                     closeModal={hideModal}
-                    onDelete={() => {setIsOpen(false)}}
+                    onDelete={() => OnDeleteAPI()}
                     isOpen={isOpen}
+                    UbahStateValue={UbahStateValue}
+                    formData={formModal}
                 />
             }
             {children}

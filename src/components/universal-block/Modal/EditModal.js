@@ -1,23 +1,35 @@
 "use client"
-import React, { createContext, useContext, useState } from 'react';
+import React, { forwardRef } from 'react';
 
 // ikon 
 import { IoCloseSharp } from "react-icons/io5";
 
+// komponen eksternal
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+
+
 // komponen internal
 import Dropdown from '@/components/universal-block/Dropdown/Dropdown';
 import TextInput from '@/components/universal-block/Input/TextInput';
+import CalendarContainer from './OverlayPortal';
 
 function EditCreatePopupModal({
-    SetNama,
-    nama,
-    SetNominal,
-    nominal,
     closeModal=() => {},
     onSubmit=() => {},
     onDelete=() => {},
-    isEdit=false
+    isEdit=false,
+    UbahStateValue,
+    formData
 }) {
+
+    const ExampleCustomInput = forwardRef(
+        ({ value, onClick, className }, ref) => (
+            <button className={className} onClick={onClick} ref={ref}>
+                {value}
+            </button>
+        ),
+    );
     return (
     
         <div className='fixed inset-0 w-full h-full
@@ -49,10 +61,10 @@ function EditCreatePopupModal({
                         <p className='text-sm'>Nama</p>
                         <div className='mt-1'/>
                         <TextInput 
-                            callback={(data) => SetNama(data)}
+                            callback={(data) => UbahStateValue(data, 'nama')}
                             inputID={"nama"}
                             placeholder='Nama'
-                            value={nama}
+                            value={formData.nama}
                             className={'w-full max-w-[250px]'}
                         />
                     </div>
@@ -60,10 +72,10 @@ function EditCreatePopupModal({
                         <p className='text-sm'>Nominal</p>
                         <div className='mt-1'/>
                         <TextInput 
-                            callback={(data) => SetNominal(data)}
+                            callback={(data) => UbahStateValue(data, 'nominal')}
                             inputID={"nominal"}
                             placeholder='Nominal'
-                            value={nominal}
+                            value={formData.nominal}
                             className={'w-full max-w-[250px]'}
                         />
                     </div>
@@ -71,18 +83,35 @@ function EditCreatePopupModal({
                         <p className='text-sm'>Kategori</p>
                         <div className='mt-1'/>
                         <Dropdown 
-
+                            callback={(data) => UbahStateValue(data, 'kategori')}
+                            name='kategori'
+                            value={formData.kategori}
                         />
                     </div>
                     <div>
                         <p className='text-sm'>Tanggal</p>
                         <div className='mt-1'/>
-                        <Dropdown />
+                        <DatePicker 
+                            selected={formData.tanggal} 
+                            onChange={(date) => UbahStateValue(date, 'tanggal')} 
+                            className='"bg-white p-2 border-2 border-black text-sm rounded-lg relative"'
+                            popperClassName="z-[200]"
+                            popperProps={{strategy: 'fixed'}} 
+                            placeholderText='pilih tanggal'
+                            showTimeSelect
+                            dateFormat="MMMM d, yyyy hh:mm a"
+                            CalendarContainer={CalendarContainer}
+                        />
                     </div>
                     <div>
                         <p className='text-sm'>Tipe Pengeluaran</p>
                         <div className='mt-1'/>
-                        <Dropdown />
+                        <Dropdown 
+                            callback={(data) => UbahStateValue(data, 'jenisPengeluaran')}
+                            name='jenis pengeluaran'
+                            value={formData.jenisPengeluaran}
+                            options={['income', 'expense']}
+                        />
                     </div>
                     {/* Button */}
                     <div className='w-full flex flex-wrap gap-2 mt-2'>

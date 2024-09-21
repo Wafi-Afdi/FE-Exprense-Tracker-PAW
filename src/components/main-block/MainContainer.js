@@ -6,6 +6,7 @@ import { IoIosSearch } from "react-icons/io";
 
 
 import Dropdown from '../universal-block/Dropdown/Dropdown'
+import DatePicker from 'react-datepicker';
 
 function MainContainer() {
     const [searchQuery, SetSearchQuery] = useState("")
@@ -135,6 +136,7 @@ function MainContainer() {
                                 <p>Nominal</p>
                             </div>
                         </div>
+                        <DatePicker />
                     </div>
                 </div>
             </div>

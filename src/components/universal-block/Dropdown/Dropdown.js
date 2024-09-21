@@ -51,14 +51,13 @@ function Dropdown({value = "", callback=(data) => {}, options=["test", "test2", 
             <button className='border-2 border-slate-900 rounded-lg p-2
                 flex items-center justify-between 
                 font-bold text-sm
-                z-50
                 bg-white
 
             '
             onClick={(e) => SetIsOpen(!isOpen)}
             type='button'
             >
-                <p>
+                <p className={`${value ? 'text-black' : 'text-gray-600'}`}>
                     {showValue()}
                 </p>
                 {
