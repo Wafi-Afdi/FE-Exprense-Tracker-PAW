@@ -22,15 +22,19 @@ function MainContainer() {
 
   useEffect(() => {
     if (fetched) return;
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions`)
-      .then((res) => {
-        SetDataPengeluaran(res.data.data);
-        setFetched(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const update = () => {
+      axios
+        .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions`)
+        .then((res) => {
+          SetDataPengeluaran(res.data.data);
+          setFetched(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    update();
+    modalContext.setOnUpdate(update);
   });
 
   // filter

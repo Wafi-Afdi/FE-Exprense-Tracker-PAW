@@ -1,13 +1,9 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-// ikon
-import { IoCloseSharp } from "react-icons/io5";
+import React, { createContext, useContext, useRef, useState } from "react";
 
 // komponen internal
-import Dropdown from "@/components/universal-block/Dropdown/Dropdown";
-import TextInput from "@/components/universal-block/Input/TextInput";
 import EditCreatePopupModal from "@/components/universal-block/Modal/EditModal";
+import axios from "axios";
 
 const ModalContext = createContext();
 
@@ -15,17 +11,23 @@ export const ModalProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // untuk data
-  const [idTerpilih, SetIDTerpilih] = useState(null); // id mongo
   const [isEdit, SetIsEdit] = useState(true);
 
+  // Untuk update setelah create/edit/delete
+  const onUpdate = useRef();
+  const setOnUpdate = (func) => {
+    onUpdate.current = func;
+  };
+
   // untuk form
-  const [formModal, SetFormModal] = useState({
-    nama: "",
-    nominal: "",
-    kategori: "",
-    tanggal: new Date(),
-    jenisPengeluaran: "Income",
-  });
+  const defaultFormData = {
+    name: "",
+    description: "",
+    category: "",
+    amount: "",
+    date: new Date(),
+  };
+  const [formModal, SetFormModal] = useState(defaultFormData);
 
   function UbahStateValue(value, key) {
     const copyForm = formModal;
@@ -33,13 +35,9 @@ export const ModalProvider = ({ children }) => {
     SetFormModal({ ...copyForm });
   }
 
-  const showModal = (is_edit, id_unik = null) => {
+  const showModal = (is_edit, form_data = defaultFormData) => {
     SetIsEdit(is_edit);
-    if (id_unik) {
-      SetIDTerpilih(id_unik);
-      // baru fetch disini form nya
-    }
-
+    SetFormModal(form_data);
     setIsOpen(true);
   };
 
@@ -57,12 +55,22 @@ export const ModalProvider = ({ children }) => {
   function OnSubmitAPI(e) {
     // TODO Ananta untuk save / submit baru di cek dulu
     e.preventDefault();
+    if (!isEdit) {
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions`,
+          formModal
+        )
+        .then(() => {
+          hideModal();
+          onUpdate.current();
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   return (
-    <ModalContext.Provider
-      value={{ showModal, hideModal, SetIDTerpilih, showModal }}
-    >
+    <ModalContext.Provider value={{ showModal, hideModal, setOnUpdate }}>
       {isOpen && (
         <EditCreatePopupModal
           isEdit={isEdit}
