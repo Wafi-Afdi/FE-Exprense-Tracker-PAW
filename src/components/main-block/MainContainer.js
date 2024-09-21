@@ -39,7 +39,7 @@ function MainContainer() {
 
   // filter
   const [filter, SetFilter] = useState({
-    date: "",
+    date: null,
     category: "",
   });
   const UbahFilterValue = (value, key) =>
@@ -54,14 +54,30 @@ function MainContainer() {
   // Filter data berdasarkan search & filter
   const filteredData = useMemo(
     () =>
-      dataPengeluaran.filter((data) =>
-        searchQuery
-          .split(/\s+/)
-          .every((searchWord) =>
-            data.name.toLowerCase().includes(searchWord.toLowerCase())
-          )
-      ),
-    [dataPengeluaran, searchQuery]
+      dataPengeluaran
+        // search filter
+        .filter((data) =>
+          searchQuery
+            .split(/\s+/)
+            .every((searchWord) =>
+              data.name.toLowerCase().includes(searchWord.toLowerCase())
+            )
+        )
+        // date filter
+        .filter(
+          (data) =>
+            !filter.date ||
+            (new Date(data.date).getFullYear() === filter.date.getFullYear() &&
+              new Date(data.date).getMonth() === filter.date.getMonth())
+        )
+        .filter(
+          (data) => !filter.category || data.category === filter.category
+        ),
+    [dataPengeluaran, searchQuery, filter]
+  );
+  const totalPengeluaranFiltered = useMemo(
+    () => filteredData.reduce((sum, item) => sum + item.amount, 0),
+    [filteredData]
   );
 
   // Grup data pengeluaran berdasarkan harinya
@@ -88,6 +104,10 @@ function MainContainer() {
     SetSearchQuery(searchQuery);
   }
 
+  useEffect(() => {
+    console.log(filter);
+  }, [filter]);
+
   return (
     <main className="flex flex-col gap-8  items-center sm:items-start w-full mt-10 z-[1] relative">
       {/* Title */}
@@ -96,7 +116,7 @@ function MainContainer() {
           Halo, Selamat Datang Pengguna
         </h1>
         <div className="col-start-1 col-end-3 row-start-2">
-          <h2>Total Pengeluaran : {"INI SEHARUSNYA DIFETCH"}</h2>
+          <h2>Total Pengeluaran : {totalPengeluaran}</h2>
         </div>
         <div className="col-start-3 col-end-5 row-span-2">
           <h2>Hari ini</h2>
@@ -122,15 +142,9 @@ function MainContainer() {
         </div>
         <div className="w-full flex flex-row gap-3 flex-wrap mt-2">
           <Dropdown
-            name="jenis pengeluaran"
-            options={["income", "expense"]}
-            callback={(data) => UbahFilterValue(data, "jenisPengeluaran")}
-            value={filter.jenisPengeluaran}
-          />
-          <Dropdown
             name="kategori"
-            options={["income", "expense"]}
-            callback={(data) => UbahFilterValue(data, "kategori")}
+            options={["none", "income", "expense"]}
+            callback={(data) => UbahFilterValue(data, "category")}
             value={filter.category}
           />
           <DatePicker
@@ -149,7 +163,8 @@ function MainContainer() {
       <div className="w-full flex flex-col gap-5">
         <div className="w-full flex flex-col gap-5">
           <h2 className="text-xl">
-            <span className="font-bold">Total</span> : {totalPengeluaran}
+            <span className="font-bold">Total</span> :{" "}
+            {totalPengeluaranFiltered}
           </h2>
           <button
             className="bg-slate-400 bg-opacity-20 h-[100px] w-full flex justify-center items-center 
