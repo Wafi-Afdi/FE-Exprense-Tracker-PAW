@@ -47,13 +47,19 @@ export const ModalProvider = ({ children }) => {
 
   // integrasi buat delete
   function OnDeleteAPI() {
-    // TODO Ananta untuk delete berdasarkan id
-    setIsOpen(false);
+    axios
+      .delete(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions/${formModal._id}`
+      )
+      .then(() => {
+        hideModal();
+        onUpdate.current();
+      })
+      .catch((err) => console.log(err));
   }
 
   // integrasi buat edit atau buat baru
   function OnSubmitAPI(e) {
-    // TODO Ananta untuk save / submit baru di cek dulu
     e.preventDefault();
     if (!isEdit) {
       axios
