@@ -22,14 +22,6 @@ function EditCreatePopupModal({
   UbahStateValue,
   formData,
 }) {
-
-    const ExampleCustomInput = forwardRef(
-        ({ value, onClick, className }, ref) => (
-            <button className={className} onClick={onClick} ref={ref}>
-                {value}
-            </button>
-        ),
-    );
     return (
     
         <div className='fixed inset-0 w-full h-full
