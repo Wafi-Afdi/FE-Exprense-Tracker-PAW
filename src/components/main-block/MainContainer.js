@@ -14,8 +14,7 @@ import CardPengeluaran from "../universal-block/Card/CardPengeluaran";
 import Dropdown from "../universal-block/Dropdown/Dropdown";
 import axios from "axios";
 import DropdownTypable from "../universal-block/Dropdown/DropdownTypable";
-import TextInput from '@/components/universal-block/Input/TextInput';
-
+import TextInput from "@/components/universal-block/Input/TextInput";
 
 function MainContainer() {
   const [searchQuery, SetSearchQuery] = useState("");
@@ -30,6 +29,7 @@ function MainContainer() {
         .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions`)
         .then((res) => {
           SetDataPengeluaran(res.data.data);
+          SetFilter({});
           setFetched(true);
         })
         .catch((err) => {
@@ -41,27 +41,29 @@ function MainContainer() {
   });
 
   // filter
-  const [filter, SetFilter] = useState({
-    category: "",
-    startDate : null,
-    endDate : null,
-    minAmount : null,
-    maxAmount : null,
-  });
-
+  const [filter, SetFilter] = useState({});
 
   useEffect(() => {
-    // Kalo mau update fetch filter disini
-  }, [filter])
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/transactions/filter`, {
+        params: filter,
+      })
+      .then((res) => {
+        console.log(res);
+        SetDataPengeluaran(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [filter]);
   const UbahFilterValue = (value, key) =>
     SetFilter((filter) => ({ ...filter, [key]: value }));
-
   const UbahTanggal = (value) =>
-    SetFilter((filter) => ({ ...filter, 
-        ['startDate']: moment(value).startOf('month').toDate(),
-        ['endDate']: moment(value).endOf('month').toDate()
-      })
-    );
+    SetFilter((filter) => ({
+      ...filter,
+      ["startDate"]: moment(value).startOf("month").toDate(),
+      ["endDate"]: moment(value).endOf("month").toDate(),
+    }));
 
   // Kalkulasi total semua pengeluaran
   const totalPengeluaran = useMemo(
@@ -82,19 +84,8 @@ function MainContainer() {
                 .toLowerCase()
                 .includes(searchWord.toLowerCase())
             )
-        )
-        // date filter
-        .filter(
-          (data) =>
-            !filter.startDate ||
-            (new Date(data.date).getFullYear() === filter.startDate.getFullYear() &&
-              new Date(data.date).getMonth() === filter.startDate.getMonth())
-        )
-        // category filter
-        .filter(
-          (data) => !filter.category || data.category === filter.category
         ),
-    [dataPengeluaran, searchQuery, filter]
+    [dataPengeluaran, searchQuery]
   );
   const totalPengeluaranFiltered = useMemo(
     () => filteredData.reduce((sum, item) => sum + item.amount, 0),
@@ -124,7 +115,7 @@ function MainContainer() {
     const searchQuery = Object.fromEntries(new FormData(e.target)).search;
     SetSearchQuery(searchQuery);
 
-    // Seharusnya disini filter juga 
+    // Seharusnya disini filter juga
   }
 
   return (
@@ -160,12 +151,11 @@ function MainContainer() {
           </div>
         </div>
         <div className="w-full flex flex-row gap-3 flex-wrap mt-2">
-          <DropdownTypable 
-            callback={(data) => UbahFilterValue(data, 'category')}
+          <DropdownTypable
+            callback={(data) => UbahFilterValue(data, "category")}
             value={filter.category}
-            name='kategori'
-            className={'w-[200px]'}
-            
+            name="kategori"
+            className={"w-[200px]"}
           />
           <DatePicker
             className="bg-white p-2 border-2 border-black text-sm rounded-lg relative"
@@ -177,12 +167,12 @@ function MainContainer() {
             selected={filter.startDate}
             onChange={(date) => UbahTanggal(date)}
           />
-          <TextInput 
-            callback={(data) => UbahFilterValue(data, 'maxAmount')}
+          <TextInput
+            callback={(data) => UbahFilterValue(data, "maxAmount")}
             inputID={"nominal_maksimum"}
-            placeholder='Nominal Maksimum'
+            placeholder="Nominal Maksimum"
             value={filter.maxAmount}
-            className={'w-full max-w-[250px]'}
+            className={"w-full max-w-[250px]"}
             type="number"
           />
         </div>
