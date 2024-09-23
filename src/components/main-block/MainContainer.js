@@ -202,6 +202,7 @@ function MainContainer() {
                   </div>
                   {/* Show card */}
                   {items.map((data, idx) => {
+                    //console.log(data)
                     return (
                       <div className="mb-2 w-full" key={data.name}>
                         <CardPengeluaran

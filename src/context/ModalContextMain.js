@@ -1,9 +1,9 @@
 "use client";
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 
 // komponen internal
 import EditCreatePopupModal from "@/components/universal-block/Modal/EditModal";
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 
 const ModalContext = createContext();
 
@@ -36,8 +36,16 @@ export const ModalProvider = ({ children }) => {
   }
 
   const showModal = (is_edit, form_data = defaultFormData) => {
+    //console.log(form_data)
     SetIsEdit(is_edit);
-    SetFormModal(form_data);
+    SetFormModal({
+      name: form_data.name,
+      description: form_data.description,
+      category: form_data.category,
+      amount: form_data.amount,
+      date: form_data.date,
+      _id : form_data._id
+    });
     setIsOpen(true);
   };
 
@@ -57,6 +65,10 @@ export const ModalProvider = ({ children }) => {
       })
       .catch((err) => console.log(err));
   }
+
+  useEffect(() => {
+    console.log(formModal)
+  }, [formModal])
 
   // integrasi buat edit atau buat baru
   function OnSubmitAPI(e) {
@@ -87,7 +99,7 @@ export const ModalProvider = ({ children }) => {
   }
 
   return (
-    <ModalContext.Provider value={{ showModal, hideModal, setOnUpdate }}>
+    <ModalContext.Provider value={{ showModal, hideModal, setOnUpdate, SetFormModal }}>
       {isOpen && (
         <EditCreatePopupModal
           isEdit={isEdit}

@@ -53,10 +53,10 @@ function EditCreatePopupModal({
                         <p className='text-sm'>Nama</p>
                         <div className='mt-1'/>
                         <TextInput 
-                            callback={(data) => UbahStateValue(data, 'nama')}
+                            callback={(data) => UbahStateValue(data, 'name')}
                             inputID={"nama"}
                             placeholder='Nama'
-                            value={formData.nama}
+                            value={formData.name}
                             className={'w-full max-w-[250px]'}
                         />
                     </div>
@@ -64,19 +64,31 @@ function EditCreatePopupModal({
                         <p className='text-sm'>Nominal</p>
                         <div className='mt-1'/>
                         <TextInput 
-                            callback={(data) => UbahStateValue(data, 'nominal')}
-                            inputID={"nominal"}
+                            callback={(data) => UbahStateValue(data, 'amount')}
+                            inputID={"amount"}
                             placeholder='Nominal'
-                            value={formData.nominal}
+                            value={formData.amount}
                             className={'w-full max-w-[250px]'}
+                        />
+                    </div>
+                    <div>
+                        <p className='text-sm'>Deskripsi</p>
+                        <div className='mt-1'/>
+                        <TextInput 
+                            callback={(data) => UbahStateValue(data, 'description')}
+                            inputID={"deskripsi"}
+                            placeholder='Deskripsi'
+                            value={formData.description}
+                            className={'w-full max-w-[250px]'}
+                            type="textarea"
                         />
                     </div>
                     <div>
                         <p className='text-sm'>Kategori</p>
                         <div className='mt-1'/>
                         <DropdownTypable 
-                            callback={(data) => UbahStateValue(data, 'kategori')}
-                            value={formData.kategori}
+                            callback={(data) => UbahStateValue(data, 'category')}
+                            value={formData.category}
                             name='kategori'
                         />
                     </div>
@@ -84,8 +96,8 @@ function EditCreatePopupModal({
                         <p className='text-sm'>Tanggal</p>
                         <div className='mt-1'/>
                         <DatePicker 
-                            selected={formData.tanggal} 
-                            onChange={(date) => UbahStateValue(date, 'tanggal')} 
+                            selected={formData.date} 
+                            onChange={(date) => UbahStateValue(date, 'date')} 
                             className='"bg-white p-2 border-2 border-black text-sm rounded-lg relative"'
                             popperClassName="z-[200]"
                             popperProps={{strategy: 'fixed'}} 
@@ -93,16 +105,6 @@ function EditCreatePopupModal({
                             showTimeSelect
                             dateFormat="MMMM d, yyyy hh:mm a"
                             CalendarContainer={CalendarContainer}
-                        />
-                    </div>
-                    <div>
-                        <p className='text-sm'>Tipe Pengeluaran</p>
-                        <div className='mt-1'/>
-                        <Dropdown 
-                            callback={(data) => UbahStateValue(data, 'jenisPengeluaran')}
-                            name='jenis pengeluaran'
-                            value={formData.jenisPengeluaran}
-                            options={['income', 'expense']}
                         />
                     </div>
                     {/* Button */}
