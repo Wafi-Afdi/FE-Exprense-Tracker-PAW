@@ -3,7 +3,7 @@ import React, {useState, useEffect, useRef } from 'react'
 import { AiOutlineCaretDown, AiOutlineCaretUp  } from "react-icons/ai";
 
 
-function DropdownTypable({value = "", callback=(data) => {}, options=["test", "test2", "test3", "test4", "test5"], name="Placeholder", canType=false}) {
+function DropdownTypable({value = "", callback=(data) => {}, options=["test", "test2", "test3", "test4", "test5"], name="Placeholder", canType=false, className}) {
     const [isOpen, SetIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -43,9 +43,9 @@ function DropdownTypable({value = "", callback=(data) => {}, options=["test", "t
         
     }
     return (
-        <div className='relative flex flex-col items-center 
-            max-w-fit
-            '
+        <div className={`relative flex flex-col items-center 
+            max-w-fit ${className}
+            `}
             ref={dropdownRef}
         >
             <div className='

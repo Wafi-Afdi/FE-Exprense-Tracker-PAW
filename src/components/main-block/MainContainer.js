@@ -13,6 +13,9 @@ import { useModal } from "@/context/ModalContextMain";
 import CardPengeluaran from "../universal-block/Card/CardPengeluaran";
 import Dropdown from "../universal-block/Dropdown/Dropdown";
 import axios from "axios";
+import DropdownTypable from "../universal-block/Dropdown/DropdownTypable";
+import TextInput from '@/components/universal-block/Input/TextInput';
+
 
 function MainContainer() {
   const [searchQuery, SetSearchQuery] = useState("");
@@ -39,11 +42,26 @@ function MainContainer() {
 
   // filter
   const [filter, SetFilter] = useState({
-    date: null,
     category: "",
+    startDate : null,
+    endDate : null,
+    minAmount : null,
+    maxAmount : null,
   });
+
+
+  useEffect(() => {
+    // Kalo mau update fetch filter disini
+  }, [filter])
   const UbahFilterValue = (value, key) =>
     SetFilter((filter) => ({ ...filter, [key]: value }));
+
+  const UbahTanggal = (value) =>
+    SetFilter((filter) => ({ ...filter, 
+        ['startDate']: moment(value).startOf('month').toDate(),
+        ['endDate']: moment(value).endOf('month').toDate()
+      })
+    );
 
   // Kalkulasi total semua pengeluaran
   const totalPengeluaran = useMemo(
@@ -68,9 +86,9 @@ function MainContainer() {
         // date filter
         .filter(
           (data) =>
-            !filter.date ||
-            (new Date(data.date).getFullYear() === filter.date.getFullYear() &&
-              new Date(data.date).getMonth() === filter.date.getMonth())
+            !filter.startDate ||
+            (new Date(data.date).getFullYear() === filter.startDate.getFullYear() &&
+              new Date(data.date).getMonth() === filter.startDate.getMonth())
         )
         // category filter
         .filter(
@@ -105,6 +123,8 @@ function MainContainer() {
     e.preventDefault();
     const searchQuery = Object.fromEntries(new FormData(e.target)).search;
     SetSearchQuery(searchQuery);
+
+    // Seharusnya disini filter juga 
   }
 
   return (
@@ -140,11 +160,12 @@ function MainContainer() {
           </div>
         </div>
         <div className="w-full flex flex-row gap-3 flex-wrap mt-2">
-          <Dropdown
-            name="kategori"
-            options={["test", "test2", "Family"]}
-            callback={(data) => UbahFilterValue(data, "category")}
+          <DropdownTypable 
+            callback={(data) => UbahFilterValue(data, 'category')}
             value={filter.category}
+            name='kategori'
+            className={'w-[200px]'}
+            
           />
           <DatePicker
             className="bg-white p-2 border-2 border-black text-sm rounded-lg relative"
@@ -153,8 +174,16 @@ function MainContainer() {
             placeholderText="pilih bulan"
             showMonthYearPicker
             dateFormat="MMMM yyyy"
-            selected={filter.date}
-            onChange={(date) => UbahFilterValue(date, "date")}
+            selected={filter.startDate}
+            onChange={(date) => UbahTanggal(date)}
+          />
+          <TextInput 
+            callback={(data) => UbahFilterValue(data, 'maxAmount')}
+            inputID={"nominal_maksimum"}
+            placeholder='Nominal Maksimum'
+            value={filter.maxAmount}
+            className={'w-full max-w-[250px]'}
+            type="number"
           />
         </div>
       </div>

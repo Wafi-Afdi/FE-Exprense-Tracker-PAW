@@ -5,7 +5,7 @@ function TextInput({className, inputID, value="", callback=()=>{}, placeholder="
     function onChange(e) {
         callback(e.target.value)
     }
-    if(type == "text") {
+    if(type == "text" || type == "number") {
         return (
             <input className={`${className} outline-none border-2 border-black py-2 px-2 text-sm rounded-md`}
                 id={inputID}
@@ -13,6 +13,7 @@ function TextInput({className, inputID, value="", callback=()=>{}, placeholder="
                 onChange={onChange}
                 value={value}
                 placeholder={placeholder}
+                type='number'
             >
                 
             </input>
