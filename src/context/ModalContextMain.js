@@ -1,5 +1,11 @@
 "use client";
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 // komponen internal
 import EditCreatePopupModal from "@/components/universal-block/Modal/EditModal";
@@ -44,7 +50,7 @@ export const ModalProvider = ({ children }) => {
       category: form_data.category,
       amount: form_data.amount,
       date: form_data.date,
-      _id : form_data._id
+      _id: form_data._id,
     });
     setIsOpen(true);
   };
@@ -67,8 +73,8 @@ export const ModalProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    console.log(formModal)
-  }, [formModal])
+    console.log(formModal);
+  }, [formModal]);
 
   // integrasi buat edit atau buat baru
   function OnSubmitAPI(e) {
@@ -99,7 +105,9 @@ export const ModalProvider = ({ children }) => {
   }
 
   return (
-    <ModalContext.Provider value={{ showModal, hideModal, setOnUpdate, SetFormModal }}>
+    <ModalContext.Provider
+      value={{ showModal, hideModal, setOnUpdate, SetFormModal }}
+    >
       {isOpen && (
         <EditCreatePopupModal
           isEdit={isEdit}
