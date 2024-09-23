@@ -34,6 +34,7 @@ export const ModalProvider = ({ children }) => {
     date: new Date(),
   };
   const [formModal, SetFormModal] = useState(defaultFormData);
+  const [opsiDropdown, SetOpsiDropdown] = useState([])
 
   function UbahStateValue(value, key) {
     const copyForm = formModal;
@@ -104,6 +105,19 @@ export const ModalProvider = ({ children }) => {
     }
   }
 
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/kategori`, {
+      })
+      .then((res) => {
+        console.log(res);
+        SetOpsiDropdown(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [])
+
   return (
     <ModalContext.Provider
       value={{ showModal, hideModal, setOnUpdate, SetFormModal }}
@@ -117,6 +131,7 @@ export const ModalProvider = ({ children }) => {
           isOpen={isOpen}
           UbahStateValue={UbahStateValue}
           formData={formModal}
+          opsiDropdown={opsiDropdown}
         />
       )}
       {children}

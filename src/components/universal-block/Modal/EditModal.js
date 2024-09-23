@@ -21,7 +21,9 @@ function EditCreatePopupModal({
   isEdit = false,
   UbahStateValue,
   formData,
+  opsiDropdown=[]
 }) {
+    
     return (
     
         <div className='fixed inset-0 w-full h-full
@@ -90,6 +92,7 @@ function EditCreatePopupModal({
                             callback={(data) => UbahStateValue(data, 'category')}
                             value={formData.category}
                             name='kategori'
+                            options={opsiDropdown}
                         />
                     </div>
                     <div>

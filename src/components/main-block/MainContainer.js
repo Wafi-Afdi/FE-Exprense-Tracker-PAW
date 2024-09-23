@@ -20,6 +20,7 @@ function MainContainer() {
   const [searchQuery, SetSearchQuery] = useState("");
   const [fetched, setFetched] = useState(false);
   const [dataPengeluaran, SetDataPengeluaran] = useState([]);
+  const [opsiDropdownKategori, SetDropdownKategori] = useState([]);
   const modalContext = useModal();
 
   useEffect(() => {
@@ -118,6 +119,19 @@ function MainContainer() {
     // Seharusnya disini filter juga
   }
 
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/kategori`, {
+      })
+      .then((res) => {
+        console.log(res);
+        SetDropdownKategori(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [])
+
   return (
     <main className="flex flex-col gap-8  items-center sm:items-start w-full mt-10 z-[1] relative">
       {/* Title */}
@@ -156,6 +170,7 @@ function MainContainer() {
             value={filter.category}
             name="kategori"
             className={"w-[200px]"}
+            options={opsiDropdownKategori}
           />
           <DatePicker
             className="bg-white p-2 border-2 border-black text-sm rounded-lg relative"
