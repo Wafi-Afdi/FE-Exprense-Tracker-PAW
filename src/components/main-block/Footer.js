@@ -17,35 +17,36 @@ function Footer() {
       </a>
       <a
         className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-100"
-        href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+        href="https://github.com/AdindaPutri1"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Putri
+        Adinda Putri Romadhon 22/505508/TK/55321
       </a>
       <a
         className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-100"
-        href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+        href="https://github.com/Shafaauray"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Shafa
+        Shafa Aura Yogadiasa 22/496508/TK/54406
       </a>
       <a
         className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-100"
-        href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+        href="https://github.com/Anantadhirya"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Ada
+        Daniel Anantadhirya Adyawisesa Linan 22/492989/TK/53975
       </a>
       <a
         className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-100"
-        href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+        href="https://github.com/AdakHaddad"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Nanta
+        Muhammad Muqtada Alhaddad 22/500341/TK/54841
+
       </a>
     </footer>
   );
