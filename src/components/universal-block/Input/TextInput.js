@@ -13,7 +13,7 @@ function TextInput({className, inputID, value="", callback=()=>{}, placeholder="
                 onChange={onChange}
                 value={value}
                 placeholder={placeholder}
-                type='number'
+                type={type}
             >
                 
             </input>
